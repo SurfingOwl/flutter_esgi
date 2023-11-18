@@ -6,17 +6,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'pages/auth.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences preferences = await SharedPreferences.getInstance();
-  runApp(MyApp(preferences: preferences));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final SharedPreferences preferences;
-
   const MyApp({
     super.key,
-    required this.preferences,
   });
 
   @override
