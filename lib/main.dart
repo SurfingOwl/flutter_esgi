@@ -1,16 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_esgi/blocs/auth_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import 'home.dart';
+import 'pages/auth.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  runApp(MyApp(preferences: preferences));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final SharedPreferences preferences;
+
+  const MyApp({
+    super.key,
+    required this.preferences,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const Home();
+    return BlocProvider(
+      create: (context) => AuthBloc(),
+      child: const MaterialApp(
+        home: Auth(),
+      ),
+    );
   }
 }
