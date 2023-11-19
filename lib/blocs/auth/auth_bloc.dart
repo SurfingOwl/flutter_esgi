@@ -3,13 +3,11 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_esgi/models/user.dart';
+import 'package:flutter_esgi/http/http_utils.dart';
+import 'package:flutter_esgi/models/account.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../http/http_utils.dart';
-
 part 'auth_event.dart';
-
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
@@ -105,18 +103,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         data = LoginData(email: email, password: password);
       }
       final response = await Http.getApi().post("/auth/login", data: data);
-      return response.data.authToken;
+      return response.data['authToken'];
     } catch (err) {
       rethrow;
     }
   }
 
   Future<String> signUp(String name, String email, String password) async {
-    SignupData data =
-        SignupData(name: name, email: email, password: password);
+    SignupData data = SignupData(name: name, email: email, password: password);
     try {
       final response = await Http.getApi().post("/auth/signup", data: data);
-      return response.data.authToken;
+      return response.data['authToken'];
     } catch (err) {
       rethrow;
     }

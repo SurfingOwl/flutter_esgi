@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_esgi/blocs/auth_bloc.dart';
-
-import 'home.dart';
+import 'package:flutter_esgi/blocs/post/post_bloc.dart';
+import 'package:flutter_esgi/blocs/user/user_bloc.dart';
+import 'package:flutter_esgi/pages/home.dart';
 
 class Auth extends StatelessWidget {
   const Auth({super.key});
@@ -12,10 +12,10 @@ class Auth extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: UserBloc(),
+          create: (context) => UserBloc(),
         ),
         BlocProvider(
-          create: PosteBloc(),
+          create: (context) => PostBloc(),
         ),
       ],
       child: const Home(),
