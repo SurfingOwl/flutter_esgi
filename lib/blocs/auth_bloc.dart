@@ -14,20 +14,20 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(AuthState()) {
-    on<GetUserInfoFromToken>(_onGetUserInfoFromToken);
+    on<GetAccountInfoFromToken>(_onGetAccountInfoFromToken);
     on<SignIn>(_onSignIn);
     on<SignUp>(_onSignUp);
   }
 
-  void _onGetUserInfoFromToken(
-      GetUserInfoFromToken event, Emitter<AuthState> emit) async {
+  void _onGetAccountInfoFromToken(
+      GetAccountInfoFromToken event, Emitter<AuthState> emit) async {
     emit(state.copyWith(status: Status.loading));
 
     try {
-      final user = await getUserInfoFromToken(event.token);
+      final account = await getAccountInfoFromToken(event.token);
       emit(state.copyWith(
         status: Status.success,
-        user: user,
+        account: account,
       ));
     } catch (err) {
       emit(
@@ -82,10 +82,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<User> getUserInfoFromToken(String token) async {
+  Future<Account> getAccountInfoFromToken(String token) async {
     try {
       final response = await Http.getApiWithToken(token).get("/auth/me");
-      return User.fromJson(response.data as Map<String, dynamic>);
+      return Account.fromJson(response.data as Map<String, dynamic>);
     } catch (err) {
       rethrow;
     }
@@ -95,14 +95,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final String creds =
         utf8.decode(base64Decode(preferences.getString("creds") ?? ""));
-    UserLoginData data;
+    LoginData data;
     try {
       if (creds.isNotEmpty) {
-        data = UserLoginData(
+        data = LoginData(
             email: _getPasswordFromCreds(creds),
             password: _getEmailFromCreds(creds));
       } else {
-        data = UserLoginData(email: email, password: password);
+        data = LoginData(email: email, password: password);
       }
       final response = await Http.getApi().post("/auth/login", data: data);
       return response.data.authToken;
@@ -112,8 +112,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<String> signUp(String name, String email, String password) async {
-    UserSignupData data =
-        UserSignupData(name: name, email: email, password: password);
+    SignupData data =
+        SignupData(name: name, email: email, password: password);
     try {
       final response = await Http.getApi().post("/auth/signup", data: data);
       return response.data.authToken;

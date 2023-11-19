@@ -3,10 +3,12 @@ part of 'auth_bloc.dart';
 @immutable
 abstract class AuthEvent {}
 
-class GetUserInfoFromToken extends AuthEvent {
+class GetAccountInfoFromToken extends AuthEvent {
   final String token;
 
-  GetUserInfoFromToken({required this.token});
+  GetAccountInfoFromToken({
+    required this.token,
+  });
 }
 
 class SignIn extends AuthEvent {
