@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../http/http_utils.dart';
 
 part 'auth_event.dart';
+
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
@@ -18,13 +19,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SignUp>(_onSignUp);
   }
 
-  void _onGetUserInfoFromToken(
-      GetUserInfoFromToken event, Emitter<AuthState> emit) async {
+  void _onGetUserInfoFromToken(GetUserInfoFromToken event,
+      Emitter<AuthState> emit) async {
     emit(state.copyWith(status: Status.loading));
 
     try {
       final user =
-          await getUserInfoFromToken(await SharedPreferences.getInstance());
+      await getUserInfoFromToken(await SharedPreferences.getInstance());
       emit(state.copyWith(
         status: Status.success,
         user: user,
@@ -58,8 +59,28 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  void _onSignUp(SignUp event, Emitter<AuthState> emit) {
-    // TODO to implement
+  void _onSignUp(SignUp event, Emitter<AuthState> emit) async {
+    emit(state.copyWith(status: Status.loading));
+
+    try {
+      final token = await signUp(event.name, event.email, event.password);
+
+      if (token.isNotEmpty) {
+        await saveCreds(event.email, event.password);
+      }
+
+      emit(state.copyWith(
+        status: Status.success,
+        token: token,
+      ));
+    } catch (err) {
+      emit(
+        state.copyWith(
+          status: Status.error,
+          error: Exception(),
+        ),
+      );
+    }
   }
 
   Future<User> getUserInfoFromToken(SharedPreferences preferences) async {
@@ -74,7 +95,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<String> signIn(String? email, String? password) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final String creds =
-        utf8.decode(base64Decode(preferences.getString("creds") ?? ""));
+    utf8.decode(base64Decode(preferences.getString("creds") ?? ""));
     UserLoginData data;
     try {
       if (creds.isNotEmpty) {
@@ -91,6 +112,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
+  Future<String> signUp(String name, String email, String password) async {
+    UserSignupData data = UserSignupData(name: name, email: email, password: password);
+    try {
+      final response = await Http.getApi().post("/auth/signup", data: data);
+      return response.data.authToken;
+    } catch (err) {
+      rethrow;
+    }
+
+  }
+
   String _getEmailFromCreds(String creds) {
     return creds.isNotEmpty ? creds.substring(0, creds.lastIndexOf(":")) : "";
   }
@@ -99,5 +131,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     return creds.isNotEmpty
         ? creds.substring(creds.lastIndexOf(":"), creds.length - 1)
         : "";
+  }
+
+  Future<bool> saveCreds(String email, String password) async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    final String creds = "$email:$password";
+    return preferences.setString("creds", base64Encode(utf8.encode(creds)));
   }
 }

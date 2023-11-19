@@ -25,5 +25,20 @@ class UserLoginData {
   final String? email;
   final String? password;
 
-  UserLoginData({this.email, this.password});
+  UserLoginData({
+    this.email,
+    this.password,
+  });
+}
+
+class UserSignupData {
+  final String name;
+  final String email;
+  final String password;
+
+  UserSignupData({
+    required this.name,
+    required this.email,
+    required this.password,
+  });
 }
