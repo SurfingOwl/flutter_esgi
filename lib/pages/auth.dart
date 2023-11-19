@@ -9,8 +9,15 @@ class Auth extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthBloc(), // TMP => TODO Must be replaced by PosteBloc
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: UserBloc(),
+        ),
+        BlocProvider(
+          create: PosteBloc(),
+        ),
+      ],
       child: const Home(),
     );
   }

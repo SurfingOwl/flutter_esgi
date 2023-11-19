@@ -19,13 +19,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SignUp>(_onSignUp);
   }
 
-  void _onGetUserInfoFromToken(GetUserInfoFromToken event,
-      Emitter<AuthState> emit) async {
+  void _onGetUserInfoFromToken(
+      GetUserInfoFromToken event, Emitter<AuthState> emit) async {
     emit(state.copyWith(status: Status.loading));
 
     try {
-      final user =
-      await getUserInfoFromToken(await SharedPreferences.getInstance());
+      final user = await getUserInfoFromToken(event.token);
       emit(state.copyWith(
         status: Status.success,
         user: user,
@@ -83,9 +82,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<User> getUserInfoFromToken(SharedPreferences preferences) async {
+  Future<User> getUserInfoFromToken(String token) async {
     try {
-      final response = await Http.getApi().get("/auth/me");
+      final response = await Http.getApiWithToken(token).get("/auth/me");
       return User.fromJson(response.data as Map<String, dynamic>);
     } catch (err) {
       rethrow;
@@ -95,7 +94,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<String> signIn(String? email, String? password) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final String creds =
-    utf8.decode(base64Decode(preferences.getString("creds") ?? ""));
+        utf8.decode(base64Decode(preferences.getString("creds") ?? ""));
     UserLoginData data;
     try {
       if (creds.isNotEmpty) {
@@ -113,14 +112,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<String> signUp(String name, String email, String password) async {
-    UserSignupData data = UserSignupData(name: name, email: email, password: password);
+    UserSignupData data =
+        UserSignupData(name: name, email: email, password: password);
     try {
       final response = await Http.getApi().post("/auth/signup", data: data);
       return response.data.authToken;
     } catch (err) {
       rethrow;
     }
-
   }
 
   String _getEmailFromCreds(String creds) {
