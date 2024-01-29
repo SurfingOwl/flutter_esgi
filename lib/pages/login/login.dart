@@ -36,7 +36,7 @@ class LoginForm extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-              padding: const EdgeInsets.symmetric(vertical: 1),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: Text("GESTWIT", // TODO Font
                   style: Theme.of(context)
                       .textTheme
@@ -45,7 +45,7 @@ class LoginForm extends StatelessWidget {
               )
           ),
           Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical:15),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical:5),
               child: TextFormField(
                 decoration: InputDecoration(
                   labelText: "Adresse email",
@@ -57,7 +57,7 @@ class LoginForm extends StatelessWidget {
               ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical:10),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical:5),
             child: TextFormField(
               decoration: InputDecoration(
                   labelText: "Mot de passe",
