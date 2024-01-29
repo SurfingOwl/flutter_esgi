@@ -12,7 +12,7 @@ class Register extends StatelessWidget {
             children: [
               Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Text("GESTWIT", // TODO Font
+                  child: Text("GesTwit", // TODO Font
                       style: Theme.of(context)
                           .textTheme
                           .headlineSmall!
