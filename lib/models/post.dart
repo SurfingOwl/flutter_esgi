@@ -7,7 +7,7 @@ class Post {
   final DateTime createdAt;
   final String content;
   final Image? image;
-  final User? author;
+  final User author;
   final List<Comment>? comments;
   final int? commentsCount;
 
@@ -15,8 +15,8 @@ class Post {
     required this.id,
     required this.createdAt,
     required this.content,
+    required this.author,
     this.image,
-    this.author,
     this.comments,
     this.commentsCount,
   });

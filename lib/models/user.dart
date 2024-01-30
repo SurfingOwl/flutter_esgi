@@ -1,6 +1,6 @@
 class User {
   final int? id;
-  final String? name;
+  final String name;
   final DateTime? createdAt;
 
   User({
