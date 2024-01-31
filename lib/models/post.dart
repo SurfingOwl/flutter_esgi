@@ -6,7 +6,7 @@ class Post {
   final int id;
   final DateTime createdAt;
   final String content;
-  final Image? image;
+  final PostImage? image;
   final User author;
   final List<Comment>? comments;
   final int? commentsCount;
@@ -26,7 +26,7 @@ class Post {
       id: json['id'],
       createdAt: json['created_at'],
       content: json['content'],
-      image: Image.fromJson(json['image']),
+      image: PostImage.fromJson(json['image']),
       author: User.fromJson(json['author']),
       comments: Comment.mapFromJson(json['comments']),
       commentsCount: json['comments_count'],

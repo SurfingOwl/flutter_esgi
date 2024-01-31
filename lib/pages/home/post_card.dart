@@ -20,6 +20,10 @@ class PostCard extends StatelessWidget {
         child: Column(
           children: [
             Align(alignment: Alignment.topLeft, child: Text(post.content)),
+            if(post.image?.url != null) ...[
+              const SizedBox(height: 20),
+              Image.network(post.image!.url)
+            ],
             const SizedBox(height: 20),
             Align(
               alignment: Alignment.bottomRight,
@@ -28,6 +32,8 @@ class PostCard extends StatelessWidget {
                 children: [
                   const Icon(Icons.arrow_right, color: Colors.white,),
                   Text(post.author.name),
+                  const SizedBox(width: 10,),
+                  Text(post.createdAt.toLocal().toString()) // TODO composant qui affiche proprement le Datetime
                 ],
               ),
             ),

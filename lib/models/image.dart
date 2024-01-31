@@ -1,4 +1,4 @@
-class Image {
+class PostImage {
   final String path;
   final String name;
   final String type;
@@ -7,7 +7,7 @@ class Image {
   final Map<dynamic, dynamic> meta;
   final String url;
 
-  Image({
+  PostImage({
     required this.path,
     required this.name,
     required this.type,
@@ -17,8 +17,8 @@ class Image {
     required this.url,
   });
 
-  factory Image.fromJson(Map<String, dynamic> json) {
-    return Image(
+  factory PostImage.fromJson(Map<String, dynamic> json) {
+    return PostImage(
       path: json['path'],
       name: json['name'],
       type: json['type'],
