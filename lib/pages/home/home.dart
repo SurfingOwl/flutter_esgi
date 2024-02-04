@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_esgi/models/image.dart';
-import 'package:flutter_esgi/pages/home/post_card.dart';
+import 'package:flutter_esgi/pages/home/post_card/post_card.dart';
 
 import '../../models/post.dart';
 import '../../models/user.dart';
@@ -12,7 +12,8 @@ class Home extends StatelessWidget {
       createdAt: DateTime.now(),
       content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque at tortor ex. Praesent sodales elit ac nisl lobortis scelerisque non volutpat leo. Etiam euismod sem et est commodo, et eleifend magna condimentum. Ut laoreet sapien efficitur velit laoreet tempus. Quisque eu turpis erat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Sed a faucibus metus. ",
       author: User(id: 1, name: "Shan AZIZ", createdAt: DateTime.now()),
-      image: PostImage(path: '', name: '', type: '', size: 100, mime: '', meta: {}, url: 'https://www.powertrafic.fr/wp-content/uploads/2023/04/image-ia-exemple.png')
+      image: PostImage(path: '', name: '', type: '', size: 100, mime: '', meta: {}, url: 'https://www.powertrafic.fr/wp-content/uploads/2023/04/image-ia-exemple.png'),
+      commentsCount: 10
   );
 
   const Home({super.key});
@@ -24,6 +25,7 @@ class Home extends StatelessWidget {
         centerTitle: true,
         title: const Text("GesTwit"),
         actions: <Widget>[
+          IconButton(onPressed: () {}, icon: const Icon(Icons.add )),// TODO change icon
           IconButton(onPressed: () {}, icon: const Icon(Icons.account_circle_rounded)) // TODO change icon
         ]
       ),
