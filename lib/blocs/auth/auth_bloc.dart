@@ -5,12 +5,10 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_esgi/http/http_utils.dart';
 import 'package:flutter_esgi/models/account.dart';
+import 'package:flutter_esgi/repositories/auth_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../repositories/auth_repository.dart';
-
 part 'auth_event.dart';
-
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {

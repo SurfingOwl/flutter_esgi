@@ -1,14 +1,10 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_esgi/http/http_utils.dart';
 import 'package:flutter_esgi/models/user.dart';
-
-import '../../repositories/user_repository.dart';
+import 'package:flutter_esgi/repositories/user_repository.dart';
 
 part 'user_event.dart';
-
 part 'user_state.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {

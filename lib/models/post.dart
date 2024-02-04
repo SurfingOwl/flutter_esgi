@@ -39,3 +39,13 @@ class Post {
     }).toList();
   }
 }
+
+class PostRequest {
+  final String content;
+  final String? base_64_image;
+
+  PostRequest({
+    required this.content,
+    this.base_64_image,
+  });
+}

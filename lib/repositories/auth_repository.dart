@@ -1,6 +1,5 @@
 import 'package:flutter_esgi/datasources/auth_data_source.dart';
-
-import '../models/account.dart';
+import 'package:flutter_esgi/models/account.dart';
 
 class AuthRepository {
   final AuthDataSource authDataSource;

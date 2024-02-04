@@ -1,9 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter_esgi/http/http_utils.dart';
+import 'package:flutter_esgi/models/account.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../http/http_utils.dart';
-import '../models/account.dart';
 
 class AuthDataSource {
   Future<Account> getAccountInfoFromToken(String token) async {

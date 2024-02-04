@@ -1,7 +1,6 @@
 import 'package:flutter_esgi/datasources/post_data_source.dart';
-
-import '../models/page.dart';
-import '../models/post.dart';
+import 'package:flutter_esgi/models/page.dart';
+import 'package:flutter_esgi/models/post.dart';
 
 class PostRepository {
   final PostDataSource postDataSource;
@@ -18,5 +17,18 @@ class PostRepository {
 
   Future<Post> getPostById(int id) async {
     return postDataSource.getPostById(id);
+  }
+
+  Future<void> addPoste(String token, String content, String? imagePath) {
+    return postDataSource.addPost(token, content, imagePath);
+  }
+
+  Future<void> deletePoste(String token, int id) {
+    return postDataSource.deletePoste(token, id);
+  }
+
+  Future<Post> modifyPost(
+      String token, int id, String content, String? imagePath) {
+    return postDataSource.modifyPost(token, id, content, imagePath);
   }
 }

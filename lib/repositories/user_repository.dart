@@ -1,6 +1,5 @@
 import 'package:flutter_esgi/datasources/user_data_source.dart';
-
-import '../models/user.dart';
+import 'package:flutter_esgi/models/user.dart';
 
 class UserRepository {
   final UserDataSource userDataSource;

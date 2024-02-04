@@ -28,3 +28,21 @@ class Comment {
     }).toList();
   }
 }
+
+class AddCommentRequest {
+  final int post_id;
+  final String content;
+
+  AddCommentRequest({
+    required this.post_id,
+    required this.content,
+  });
+}
+
+class PatchCommentRequest {
+  final String content;
+
+  PatchCommentRequest({
+    required this.content,
+  });
+}
