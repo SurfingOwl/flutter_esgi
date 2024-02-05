@@ -5,16 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_esgi/http/http_utils.dart';
 import 'package:flutter_esgi/models/page.dart' as pagination;
 import 'package:flutter_esgi/models/post.dart';
+import 'package:flutter_esgi/repositories/post_repository.dart';
 
 part 'post_event.dart';
-
 part 'post_state.dart';
 
 class PostBloc extends Bloc<PostEvent, PostState> {
-  PostBloc() : super(PostState()) {
+  final PostRepository postRepository;
+
+  PostBloc({required this.postRepository}) : super(PostState()) {
     on<GetUserPosts>(_onGetUserPosts);
     on<GetAllPosts>(_onGetAllPosts);
     on<GetPostById>(_onGetPostById);
+    on<AddPost>(_onAddPost);
+    on<DeletePost>(_onDeletePost);
+    on<ModifyPost>(_onModifyPost);
   }
 
   void _onGetUserPosts(GetUserPosts event, Emitter<PostState> emit) async {
@@ -22,7 +27,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
     try {
       final pagination.Page posts =
-      await getUserPosts(event.id, event.page, event.size);
+          await postRepository.getUserPosts(event.id, event.page, event.size);
       emit(state.copyWith(
         status: Status.success,
         posts: posts,
@@ -34,19 +39,6 @@ class PostBloc extends Bloc<PostEvent, PostState> {
           error: Exception(),
         ),
       );
-    }
-  }
-
-  Future<pagination.Page> getUserPosts(int id, int page, int size) async {
-    try {
-      final response =
-      await Http.getApi().get("/user/$id/posts", queryParameters: {
-        "page": page,
-        "per_page": size,
-      });
-      return pagination.Page.fromJson(response.data);
-    } catch (err) {
-      rethrow;
     }
   }
 
@@ -54,7 +46,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     emit(state.copyWith(status: Status.loading));
 
     try {
-      final pagination.Page posts = await getAllPosts(event.page, event.size);
+      final pagination.Page posts =
+          await postRepository.getAllPosts(event.page, event.size);
       emit(state.copyWith(
         status: Status.success,
         posts: posts,
@@ -69,23 +62,11 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     }
   }
 
-  Future<pagination.Page> getAllPosts(int page, int size) async {
-    try {
-      final response = await Http.getApi().get("/post", queryParameters: {
-        "page": page,
-        "per_page": size,
-      });
-      return pagination.Page.fromJson(response.data);
-    } catch (err) {
-      rethrow;
-    }
-  }
-
   void _onGetPostById(GetPostById event, Emitter<PostState> emit) async {
     emit(state.copyWith(status: Status.loading));
 
     try {
-      final Post post = await getPostById(event.id);
+      final Post post = await postRepository.getPostById(event.id);
       emit(state.copyWith(
         status: Status.success,
         post: post,
@@ -100,12 +81,62 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     }
   }
 
-  Future<Post> getPostById(int id) async {
+  FutureOr<void> _onAddPost(AddPost event, Emitter<PostState> emit) async {
+    emit(state.copyWith(status: Status.loading));
+
     try {
-      final response = await Http.getApi().get("/post/$id");
-      return Post.fromJson(response.data);
+      await postRepository.addPoste(
+          event.token, event.content, event.imagePath);
+      emit(state.copyWith(
+        status: Status.success,
+      ));
     } catch (err) {
-      rethrow;
+      emit(
+        state.copyWith(
+          status: Status.error,
+          error: Exception(),
+        ),
+      );
+    }
+  }
+
+  FutureOr<void> _onDeletePost(
+      DeletePost event, Emitter<PostState> emit) async {
+    emit(state.copyWith(status: Status.loading));
+
+    try {
+      await postRepository.deletePoste(event.token, event.id);
+      emit(state.copyWith(
+        status: Status.success,
+      ));
+    } catch (err) {
+      emit(
+        state.copyWith(
+          status: Status.error,
+          error: Exception(),
+        ),
+      );
+    }
+  }
+
+  FutureOr<void> _onModifyPost(
+      ModifyPost event, Emitter<PostState> emit) async {
+    emit(state.copyWith(status: Status.loading));
+
+    try {
+      final post = await postRepository.modifyPost(
+          event.token, event.id, event.content, event.imagePath);
+      emit(state.copyWith(
+        status: Status.success,
+        post: post,
+      ));
+    } catch (err) {
+      emit(
+        state.copyWith(
+          status: Status.error,
+          error: Exception(),
+        ),
+      );
     }
   }
 }

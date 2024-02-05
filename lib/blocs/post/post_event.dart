@@ -32,3 +32,39 @@ class GetPostById extends PostEvent {
     required this.id,
   });
 }
+
+class AddPost extends PostEvent {
+  final String token;
+  final String content;
+  final String? imagePath;
+
+  AddPost({
+    required this.token,
+    required this.content,
+    this.imagePath,
+  });
+}
+
+class DeletePost extends PostEvent {
+  final String token;
+  final int id;
+
+  DeletePost({
+    required this.token,
+    required this.id,
+  });
+}
+
+class ModifyPost extends PostEvent {
+  final String token;
+  final int id;
+  final String content;
+  final String? imagePath;
+
+  ModifyPost({
+    required this.token,
+    required this.id,
+    required this.content,
+    this.imagePath,
+  });
+}
