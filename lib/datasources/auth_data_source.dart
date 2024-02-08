@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_esgi/http/http_utils.dart';
 import 'package:flutter_esgi/models/account.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,7 +16,7 @@ class AuthDataSource {
     }
   }
 
-  Future<String> signIn(String? email, String? password) async {
+  Future<AuthToken> signIn(String? email, String? password) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final String creds =
         utf8.decode(base64Decode(preferences.getString("creds") ?? ""));
@@ -27,19 +29,33 @@ class AuthDataSource {
       } else {
         data = LoginData(email: email, password: password);
       }
-      final response = await Http.getApi().post("/auth/login", data: data);
-      return response.data['authToken'];
+      // log("here");
+      log(data.email.toString());
+      log(data.password.toString());
+      var dio = Http.getApi();
+      final response = await dio.post("/auth/login", data: jsonEncode(data));
+
+      if(response.statusCode != 200) {
+        throw Exception("Login failed");
+      }
+      return AuthToken.fromJson(response.data);
     } catch (err) {
+      log(err.toString());
       rethrow;
     }
   }
 
-  Future<String> signUp(String name, String email, String password) async {
+  Future<AuthToken> signUp(String name, String email, String password) async {
     SignupData data = SignupData(name: name, email: email, password: password);
     try {
-      final response = await Http.getApi().post("/auth/signup", data: data);
-      return response.data['authToken'];
+      log(jsonEncode(data));
+      final response = await Http.getApi().post("/auth/signup", data: jsonEncode(data));
+      if(response.statusCode != 200) {
+          throw Exception("Register failed");
+      }
+      return AuthToken.fromJson(response.data);
     } catch (err) {
+      log(err.toString());
       rethrow;
     }
   }

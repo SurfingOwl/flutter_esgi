@@ -10,11 +10,11 @@ class AuthRepository {
     return authDataSource.getAccountInfoFromToken(token);
   }
 
-  Future<String> signIn(String? email, String? password) async {
+  Future<AuthToken> signIn(String? email, String? password) async {
     return authDataSource.signIn(email, password);
   }
 
-  Future<String> signUp(String name, String email, String password) async {
+    Future<AuthToken> signUp(String name, String email, String password) async {
     return authDataSource.signUp(name, email, password);
   }
 }
