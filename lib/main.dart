@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_esgi/app_routes.dart';
 import 'package:flutter_esgi/pages/auth/auth_bloc/auth_bloc.dart';
 import 'package:flutter_esgi/datasources/auth_data_source.dart';
 import 'package:flutter_esgi/pages/auth/login/login.dart';
+import 'package:flutter_esgi/pages/auth/register/register.dart';
 import 'package:flutter_esgi/repositories/auth_repository.dart';
 import 'package:flutter_esgi/repositories/post_repository.dart';
 import 'package:flutter_esgi/repositories/user_repository.dart';
+import 'package:go_router/go_router.dart';
 
 import 'blocs/post/post_bloc.dart';
 import 'blocs/user/user_bloc.dart';
@@ -60,38 +61,51 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ],
-        child: MaterialApp(
+        child: MaterialApp.router(
           theme: ThemeData(
-              // textTheme: GoogleFonts,
-              scaffoldBackgroundColor: Colors.black38,
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple),
-              textTheme: Theme.of(context).textTheme.apply(
-                    bodyColor: Colors.white,
-                    displayColor: Colors.white,
-                  ),
-              inputDecorationTheme: InputDecorationTheme(
-                hintStyle: Theme.of(context)
-                    .textTheme
-                    .labelLarge!
-                    .copyWith(color: Colors.white),
-                border: const OutlineInputBorder(),
-                focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.purple, width: 2.5),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  ),
+            // textTheme: GoogleFonts,
+            scaffoldBackgroundColor: Colors.black38,
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple),
+            textTheme: Theme.of(context).textTheme.apply(
+                  bodyColor: Colors.white,
+                  displayColor: Colors.white,
                 ),
-                enabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.purple, width: 1.5),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  ),
+            inputDecorationTheme: InputDecorationTheme(
+              hintStyle: Theme.of(context)
+                  .textTheme
+                  .labelLarge!
+                  .copyWith(color: Colors.white),
+              border: const OutlineInputBorder(),
+              focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.purple, width: 2.5),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
                 ),
               ),
-              appBarTheme: AppBarTheme(
-                backgroundColor: Colors.purple.withOpacity(0.2),
-              )),
-          home: const AppRoutes(),
+              enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.purple, width: 1.5),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ),
+              ),
+            ),
+            appBarTheme: AppBarTheme(
+              backgroundColor: Colors.purple.withOpacity(0.2),
+            ),
+          ),
+          routerConfig: GoRouter(
+            initialLocation: '/login',
+            routes: [
+              GoRoute(
+                path: '/login',
+                builder: (context, state) => const Login(),
+              ),
+              GoRoute(
+                path: '/register',
+                builder: (context, state) => const Register(),
+              ),
+            ],
+          ),
         ),
       ),
     );
