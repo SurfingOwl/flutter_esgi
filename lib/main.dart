@@ -5,12 +5,12 @@ import 'package:flutter_esgi/datasources/auth_data_source.dart';
 import 'package:flutter_esgi/pages/auth/login/login.dart';
 import 'package:flutter_esgi/pages/auth/register/register.dart';
 import 'package:flutter_esgi/pages/home/home.dart';
+import 'package:flutter_esgi/pages/home/posts/post_bloc/post_bloc.dart';
 import 'package:flutter_esgi/repositories/auth_repository.dart';
 import 'package:flutter_esgi/repositories/post_repository.dart';
 import 'package:flutter_esgi/repositories/user_repository.dart';
 import 'package:go_router/go_router.dart';
 
-import 'blocs/post/post_bloc.dart';
 import 'blocs/user/user_bloc.dart';
 import 'datasources/post_data_source.dart';
 import 'datasources/user_data_source.dart';
