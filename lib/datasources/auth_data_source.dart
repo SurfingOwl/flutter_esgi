@@ -17,18 +17,18 @@ class AuthDataSource {
   }
 
   Future<AuthToken> signIn(String? email, String? password) async {
-    final SharedPreferences preferences = await SharedPreferences.getInstance();
-    final String creds =
-        utf8.decode(base64Decode(preferences.getString("creds") ?? ""));
+    // final SharedPreferences preferences = await SharedPreferences.getInstance();
+    // final String creds =
+    //     utf8.decode(base64Decode(preferences.getString("creds") ?? ""));
     LoginData data;
     try {
-      if (creds.isNotEmpty) {
-        data = LoginData(
-            email: _getPasswordFromCreds(creds),
-            password: _getEmailFromCreds(creds));
-      } else {
+      // if (creds.isNotEmpty) {
+      //   data = LoginData(
+      //       email: _getPasswordFromCreds(creds),
+      //       password: _getEmailFromCreds(creds));
+      // } else {
         data = LoginData(email: email, password: password);
-      }
+      // }
       // log("here");
       log(data.email.toString());
       log(data.password.toString());
@@ -36,6 +36,7 @@ class AuthDataSource {
       final response = await dio.post("/auth/login", data: jsonEncode(data));
 
       if(response.statusCode != 200) {
+        log(response.toString());
         throw Exception("Login failed");
       }
       return AuthToken.fromJson(response.data);

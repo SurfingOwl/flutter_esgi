@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_esgi/common/widgets/gestwit_title.dart';
-import 'package:flutter_esgi/http/http_utils.dart';
-import 'package:flutter_esgi/pages/auth/auth_bloc/auth_bloc.dart';
 import 'package:flutter_esgi/pages/auth/register/register_form.dart';
-
-import '../../home/home.dart';
 
 class Register extends StatelessWidget {
   const Register({super.key});
