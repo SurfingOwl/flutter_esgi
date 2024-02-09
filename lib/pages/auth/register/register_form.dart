@@ -64,10 +64,6 @@ class _RegisterFormState extends State<RegisterForm> {
         ElevatedButton(
           onPressed: () => _register(context, pseudonymeController.text,
               emailController.text, passwordController.text),
-          // TODO as THEME
-          style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10))),
           child: Text(
             "Créer un compte",
             style: Theme.of(context)

@@ -60,11 +60,6 @@ class _LoginFormState extends State<LoginForm> {
               login(context, emailController.text,
                   passwordController.text);
             },
-            // TODO as THEME
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-            ),
             child: Text(
               "Se connecter",
               style: Theme.of(context)

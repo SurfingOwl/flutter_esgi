@@ -50,11 +50,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         status: Status.success,
         token: token,
       ));
-    } catch (err) {
+    } on Exception catch (err) {
       emit(
         state.copyWith(
           status: Status.error,
-          error: Exception(),
+          error: err,
         ),
       );
     }
@@ -67,27 +67,27 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final token =
           await authRepository.signUp(event.name, event.email, event.password);
 
-      if (token.authToken!.isNotEmpty) {
-        await saveCreds(event.email, event.password);
-      }
+      // if (token.authToken!.isNotEmpty) {
+      //   await saveCreds(event.email, event.password);
+      // }
 
       emit(state.copyWith(
         status: Status.success,
         token: token,
       ));
-    } catch (err) {
+    } on Exception catch (err) {
       emit(
         state.copyWith(
           status: Status.error,
-          error: Exception(),
+          error: err,
         ),
       );
     }
   }
 
-  Future<bool> saveCreds(String email, String password) async {
-    final SharedPreferences preferences = await SharedPreferences.getInstance();
-    final String creds = "$email:$password";
-    return preferences.setString("creds", base64Encode(utf8.encode(creds)));
-  }
+  // Future<bool> saveCreds(String email, String password) async {
+  //   final SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   final String creds = "$email:$password";
+  //   return preferences.setString("creds", base64Encode(utf8.encode(creds)));
+  // }
 }
