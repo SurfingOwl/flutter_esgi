@@ -54,7 +54,9 @@ class _PostsState extends State<Posts> {
               itemCount: 10,
             );
           case Status.initial || Status.loading:
-            return const Text("loading");
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           case Status.error:
             return const Text("Error");
         }

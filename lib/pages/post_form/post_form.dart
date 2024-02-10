@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class PostForm extends StatelessWidget {
   const PostForm({super.key});
@@ -8,7 +9,7 @@ class PostForm extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
-          leading: IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_back)), // TODO change icon
+          leading: IconButton(onPressed: () { context.go('/');}, icon: const Icon(Icons.arrow_back)), // TODO change icon
           title: const Text("Publication"),
           actions: <Widget>[
             Padding(

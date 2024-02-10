@@ -102,7 +102,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
           routerConfig: GoRouter(
-            initialLocation: '/login',
+            initialLocation: '/',
             routes: [
               GoRoute(
                 path: '/login',
