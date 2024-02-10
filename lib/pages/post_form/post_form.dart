@@ -24,16 +24,12 @@ class PostForm extends StatelessWidget {
       body: Form(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 12),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 25, horizontal: 12),
               child: TextField(
                 decoration: InputDecoration(
-                  border: const UnderlineInputBorder(),
-                  labelStyle: Theme.of(context)
-                    .textTheme
-                    .labelMedium!
-                    .copyWith(color: Colors.white),
-                  labelText: "De quoi voulez vous parler"
+                  border: UnderlineInputBorder(),
+                  hintText: "De quoi voulez vous parler",
                 ),
                 maxLines: 10,
                 keyboardType: TextInputType.multiline,

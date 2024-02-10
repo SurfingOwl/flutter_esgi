@@ -6,6 +6,7 @@ import 'package:flutter_esgi/pages/auth/login/login.dart';
 import 'package:flutter_esgi/pages/auth/register/register.dart';
 import 'package:flutter_esgi/pages/home/home.dart';
 import 'package:flutter_esgi/pages/home/posts/post_bloc/post_bloc.dart';
+import 'package:flutter_esgi/pages/post_form/post_form.dart';
 import 'package:flutter_esgi/repositories/auth_repository.dart';
 import 'package:flutter_esgi/repositories/post_repository.dart';
 import 'package:flutter_esgi/repositories/user_repository.dart';
@@ -114,6 +115,10 @@ class MyApp extends StatelessWidget {
               GoRoute(
                 path: '/',
                 builder: (context, state) => const Home(),
+              ),
+              GoRoute(
+                path: '/new_post',
+                builder: (context, state) => const PostForm(),
               ),
             ],
           ),
