@@ -4,7 +4,7 @@ import 'package:flutter_esgi/models/user.dart';
 
 class Post {
   final int id;
-  final DateTime createdAt;
+  final int createdAt;
   final String content;
   final PostImage? image;
   final User author;
@@ -26,14 +26,14 @@ class Post {
       id: json['id'],
       createdAt: json['created_at'],
       content: json['content'],
-      image: PostImage.fromJson(json['image']),
+      image: json['image'] != null ? PostImage.fromJson(json['image']) : null,
       author: User.fromJson(json['author']),
-      comments: Comment.mapFromJson(json['comments']),
+      comments: json['comments'] != null ? Comment.mapFromJson(json['comments']) : null,
       commentsCount: json['comments_count'],
     );
   }
 
-  static List<Post> mapPostList(List<Map<String, dynamic>> json) {
+  static List<Post> mapPostList(List<dynamic> json) {
     return json.map((e) {
       return Post.fromJson(e);
     }).toList();

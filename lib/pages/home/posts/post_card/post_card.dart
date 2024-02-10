@@ -32,12 +32,11 @@ class PostCard extends StatelessWidget {
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: Row(
-                    // mainAxisSize: MainAxisSize.min,
                     children: [
                       const Icon(Icons.arrow_right, color: Colors.white,),
                       Text(post.author.name),
                       const SizedBox(width: 10,),
-                      CustomDate(dateTime: post.createdAt),
+                      CustomDate(dateInt: post.createdAt),
                     ],
                   ),
                 ),

@@ -1,12 +1,12 @@
 class Account {
   final int? id;
-  // final DateTime? createdAt;
+  final int? createdAt;
   final String? name;
   final String? email;
 
   const Account({
     this.id,
-    // this.createdAt,
+    this.createdAt,
     this.name,
     this.email,
   });
@@ -14,7 +14,7 @@ class Account {
   factory Account.fromJson(Map<String, dynamic> json) {
     return Account(
       id: json['id'],
-      // createdAt: DateTime.fromMillisecondsSinceEpoch(json['created_at']),
+      createdAt: json['created_at'],
       name: json['name'],
       email: json['email'],
     );

@@ -3,8 +3,8 @@ import 'package:flutter_esgi/models/post.dart';
 class Page {
   final int itemsReceived;
   final int curPage;
-  final int nextPage;
-  final int prevPage;
+  final int? nextPage;
+  final int? prevPage;
   final int offset;
   final int itemsTotal;
   final int pageTotal;

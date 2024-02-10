@@ -2,7 +2,7 @@ import 'package:flutter_esgi/models/user.dart';
 
 class Comment {
   final int id;
-  final DateTime createdAt;
+  final int createdAt;
   final String content;
   final User? author;
 
