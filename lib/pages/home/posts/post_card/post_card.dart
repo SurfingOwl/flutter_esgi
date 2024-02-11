@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_esgi/common/widgets/%20custom_date.dart';
+import 'package:flutter_esgi/common/widgets/custom_date.dart';
 
 import '../../../../models/post.dart';
 
