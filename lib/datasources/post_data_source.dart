@@ -45,7 +45,7 @@ class PostDataSource {
   Future<void> addPostWithImage(String token, String content, String imagePath) async {
     try {
       await Http.getApiWithToken(token)
-          .post("/post", data: formDataFromImagePath(content, imagePath));
+          .post("/post", data: await formDataFromImagePath(content, imagePath));
     } catch (err) {
       log(err.toString());
       rethrow;
@@ -62,7 +62,7 @@ class PostDataSource {
     }
   }
 
-  Future<Object> formDataFromImagePath(
+  Future<FormData> formDataFromImagePath(
       String content, String imagePath) async {{
       String? fileName = imagePath.split('/').last;
       FormData formData = FormData.fromMap({

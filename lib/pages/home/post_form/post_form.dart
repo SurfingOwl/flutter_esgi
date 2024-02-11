@@ -25,7 +25,9 @@ class _PostFormState extends State<PostForm> {
   Future pickImage() async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-      uploadImage = image?.path;
+      setState(() {
+        uploadImage = image!.path;
+      });
     }
     catch (e) {
       callSnackBar();
@@ -84,11 +86,18 @@ class _PostFormState extends State<PostForm> {
                 keyboardType: TextInputType.multiline,
               ),
             ),
-            Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
-                child: TextButton(onPressed: () { pickImage(); }, child: const Text("Ajouter une image"),) // TODO: Image picker and preview
-            ),
-
+            if(uploadImage == null)
+              Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+                  child: TextButton(onPressed: () { pickImage(); }, child: const Text("Ajouter une image"),) // TODO: Image picker and preview
+              ),
+            if(uploadImage != null) ...[
+              Image.file(File(uploadImage!), width: 300,),
+              Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+                  child: TextButton(onPressed: () { pickImage(); }, child: const Text("Modifier l'image"),) // TODO: Image picker and preview
+              ),
+            ]
           ],
         ),
       ),
