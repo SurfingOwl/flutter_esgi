@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_esgi/pages/auth/auth_bloc/auth_bloc.dart';
-import 'package:flutter_esgi/datasources/auth_data_source.dart';
-import 'package:flutter_esgi/pages/auth/login/login.dart';
-import 'package:flutter_esgi/pages/auth/register/register.dart';
-import 'package:flutter_esgi/pages/home/home.dart';
 import 'package:flutter_esgi/pages/home/posts/post_bloc/post_bloc.dart';
-import 'package:flutter_esgi/pages/post_form/post_form.dart';
+import 'package:flutter_esgi/routes.dart';
 import 'package:flutter_esgi/repositories/auth_repository.dart';
 import 'package:flutter_esgi/repositories/post_repository.dart';
 import 'package:flutter_esgi/repositories/user_repository.dart';
+import 'package:flutter_esgi/theme.dart';
 import 'package:go_router/go_router.dart';
 
 import 'blocs/user/user_bloc.dart';
+import 'datasources/auth_data_source.dart';
 import 'datasources/post_data_source.dart';
 import 'datasources/user_data_source.dart';
 
@@ -30,97 +28,32 @@ class MyApp extends StatelessWidget {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(
-          create: (context) => AuthRepository(
-            authDataSource: AuthDataSource(),
-          ),
+          create: (context) => AuthRepository(authDataSource: AuthDataSource()),
         ),
         RepositoryProvider(
-          create: (context) => PostRepository(
-            postDataSource: PostDataSource(),
-          ),
+          create: (context) => PostRepository(postDataSource: PostDataSource()),
         ),
         RepositoryProvider(
-          create: (context) => UserRepository(
-            userDataSource: UserDataSource(),
-          ),
+          create: (context) => UserRepository(userDataSource: UserDataSource()),
         ),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => AuthBloc(
-              authRepository: context.read<AuthRepository>(),
-            ),
+            create: (context) => AuthBloc(authRepository: context.read<AuthRepository>()),
           ),
           BlocProvider(
-            create: (context) => UserBloc(
-              userRepository: context.read<UserRepository>(),
-            ),
+            create: (context) => UserBloc(userRepository: context.read<UserRepository>()),
           ),
           BlocProvider(
-            create: (context) => PostBloc(
-              postRepository: context.read<PostRepository>(),
-            ),
+            create: (context) => PostBloc(postRepository: context.read<PostRepository>()),
           ),
         ],
         child: MaterialApp.router(
-          theme: ThemeData(
-            // textTheme: GoogleFonts,
-            scaffoldBackgroundColor: Colors.black38,
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple),
-            textTheme: Theme.of(context).textTheme.apply(
-                  bodyColor: Colors.white,
-                  displayColor: Colors.white,
-                ),
-            inputDecorationTheme: InputDecorationTheme(
-              hintStyle: Theme.of(context)
-                  .textTheme
-                  .labelLarge!
-                  .copyWith(color: Colors.white),
-              border: const OutlineInputBorder(),
-              focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.purple, width: 2.5),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10),
-                ),
-              ),
-              enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.purple, width: 1.5),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10),
-                ),
-              ),
-            ),
-            appBarTheme: AppBarTheme(
-              backgroundColor: Colors.purple.withOpacity(0.2),
-            ),
-            elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-              ),
-            ),
-          ),
+          theme: appTheme(context),
           routerConfig: GoRouter(
             initialLocation: '/',
-            routes: [
-              GoRoute(
-                path: '/login',
-                builder: (context, state) => const Login(),
-              ),
-              GoRoute(
-                path: '/register',
-                builder: (context, state) => const Register(),
-              ),
-              GoRoute(
-                path: '/',
-                builder: (context, state) => const Home(),
-              ),
-              GoRoute(
-                path: '/new_post',
-                builder: (context, state) => const PostForm(),
-              ),
-            ],
+            routes: routes(),
           ),
         ),
       ),

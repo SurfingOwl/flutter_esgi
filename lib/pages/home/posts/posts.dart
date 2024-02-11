@@ -6,9 +6,6 @@ import 'package:flutter_esgi/pages/home/posts/post_bloc/post_bloc.dart';
 import 'package:flutter_esgi/pages/home/posts/post_card/post_card.dart';
 
 import '../../../http/http_utils.dart';
-import '../../../models/image.dart';
-import '../../../models/post.dart';
-import '../../../models/user.dart';
 
 // TODO: retrieve from API
 // TODO: manage loader
@@ -41,7 +38,7 @@ class _PostsState extends State<Posts> {
             log(state.posts.toString());
             final posts = state.posts;
             if(posts == null) {
-              return const Text('no post');
+              return const Center(child: Text("Il n'y a aucun post pour le moment"));
             }
             return ListView.separated(
               itemBuilder: (_, index) {
@@ -60,12 +57,7 @@ class _PostsState extends State<Posts> {
           case Status.error:
             return const Text("Error");
         }
-
-
-
-
-      }
-      ,
+      },
     );
   }
 

@@ -19,8 +19,12 @@ class PostRepository {
     return postDataSource.getPostById(id);
   }
 
-  Future<void> addPoste(String token, String content, String? imagePath) {
-    return postDataSource.addPost(token, content, imagePath);
+  Future<void> addPostWithoutImage(String token, String content) {
+    return postDataSource.addPostWithoutImage(token, content);
+  }
+
+  Future<void> addPostWithImage(String token, String content, String imagePath) {
+    return postDataSource.addPostWithImage(token, content, imagePath);
   }
 
   Future<void> deletePoste(String token, int id) {

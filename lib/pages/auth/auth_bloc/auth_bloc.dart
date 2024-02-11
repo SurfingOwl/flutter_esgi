@@ -49,12 +49,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(state.copyWith(
         status: Status.success,
         token: token,
+        isAuthenticated: true,
       ));
     } on Exception catch (err) {
       emit(
         state.copyWith(
           status: Status.error,
           error: err,
+          isAuthenticated: false,
         ),
       );
     }
@@ -74,12 +76,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(state.copyWith(
         status: Status.success,
         token: token,
+        isAuthenticated: true,
       ));
     } on Exception catch (err) {
       emit(
         state.copyWith(
           status: Status.error,
           error: err,
+          isAuthenticated: false,
         ),
       );
     }

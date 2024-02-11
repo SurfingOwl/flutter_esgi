@@ -40,12 +40,14 @@ class Post {
   }
 }
 
-class PostRequest {
+class PostRequestWithoutImage {
   final String content;
-  final String? base_64_image;
 
-  PostRequest({
+  PostRequestWithoutImage({
     required this.content,
-    this.base_64_image,
   });
+
+  Map<String, dynamic> toJson() => {
+    'content': content,
+  };
 }

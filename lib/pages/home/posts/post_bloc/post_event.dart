@@ -33,15 +33,25 @@ class GetPostById extends PostEvent {
   });
 }
 
-class AddPost extends PostEvent {
+class AddPostWithImage extends PostEvent {
   final String token;
   final String content;
-  final String? imagePath;
+  final String imagePath;
 
-  AddPost({
+  AddPostWithImage({
     required this.token,
     required this.content,
-    this.imagePath,
+    required this.imagePath,
+  });
+}
+
+class AddPostWithoutImage extends PostEvent {
+  final String token;
+  final String content;
+
+  AddPostWithoutImage({
+    required this.token,
+    required this.content,
   });
 }
 

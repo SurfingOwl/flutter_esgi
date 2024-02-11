@@ -35,7 +35,6 @@ class _LoginFormState extends State<LoginForm> {
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
             child: TextFormField(
               controller: emailController,
-
               decoration: const InputDecoration(
                 hintText: "Adresse email",
               ),

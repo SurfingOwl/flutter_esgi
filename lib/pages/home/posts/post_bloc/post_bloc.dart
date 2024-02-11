@@ -17,7 +17,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     on<GetUserPosts>(_onGetUserPosts);
     on<GetAllPosts>(_onGetAllPosts);
     on<GetPostById>(_onGetPostById);
-    on<AddPost>(_onAddPost);
+    on<AddPostWithImage>(_onAddPostWithImage);
+    on<AddPostWithoutImage>(_onAddPostWithoutImage);
     on<DeletePost>(_onDeletePost);
     on<ModifyPost>(_onModifyPost);
   }
@@ -81,12 +82,31 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     }
   }
 
-  FutureOr<void> _onAddPost(AddPost event, Emitter<PostState> emit) async {
+  FutureOr<void> _onAddPostWithImage(AddPostWithImage event, Emitter<PostState> emit) async {
     emit(state.copyWith(status: Status.loading));
 
     try {
-      await postRepository.addPoste(
+      await postRepository.addPostWithImage(
           event.token, event.content, event.imagePath);
+      emit(state.copyWith(
+        status: Status.success,
+      ));
+    } catch (err) {
+      emit(
+        state.copyWith(
+          status: Status.error,
+          error: Exception(),
+        ),
+      );
+    }
+  }
+
+  FutureOr<void> _onAddPostWithoutImage(AddPostWithoutImage event, Emitter<PostState> emit) async {
+    emit(state.copyWith(status: Status.loading));
+
+    try {
+      await postRepository.addPostWithoutImage(
+          event.token, event.content);
       emit(state.copyWith(
         status: Status.success,
       ));
