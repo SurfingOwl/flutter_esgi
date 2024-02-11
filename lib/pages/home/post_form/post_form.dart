@@ -9,6 +9,7 @@ import 'package:flutter_esgi/pages/home/posts/post_bloc/post_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
+// TODO: error, redirect and refactor
 class PostForm extends StatefulWidget {
   const PostForm({super.key});
 
@@ -17,10 +18,8 @@ class PostForm extends StatefulWidget {
 }
 
 class _PostFormState extends State<PostForm> {
-
   String? uploadImage;
   TextEditingController postContentController = TextEditingController();
-
 
   Future pickImage() async {
     try {
@@ -28,12 +27,11 @@ class _PostFormState extends State<PostForm> {
       setState(() {
         uploadImage = image!.path;
       });
-    }
-    catch (e) {
+    } catch (e) {
       callSnackBar();
     }
   }
-  
+
   void callSnackBar() {
     showSnackBar(context, "Une erreur est survenue");
   }
@@ -42,14 +40,19 @@ class _PostFormState extends State<PostForm> {
     final postBloc = BlocProvider.of<PostBloc>(context);
     final authBloc = BlocProvider.of<AuthBloc>(context);
     final token = authBloc.state.token?.authToken;
-    if(token == null) {
+    if (token == null) {
       return;
     }
-    if(uploadImage == null) {
-      postBloc.add(AddPostWithoutImage(token: token, content: postContentController.text));
-    }
-    else {
-      postBloc.add(AddPostWithImage(token: token, content: postContentController.text, imagePath: uploadImage!));
+    if (uploadImage == null) {
+      postBloc.add(AddPostWithoutImage(
+          token: token, content: postContentController.text));
+    } else {
+      postBloc.add(
+        AddPostWithImage(
+            token: token,
+            content: postContentController.text,
+            imagePath: uploadImage!),
+      );
     }
   }
 
@@ -57,19 +60,24 @@ class _PostFormState extends State<PostForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          centerTitle: true,
-          leading: IconButton(onPressed: () { context.go('/');}, icon: const Icon(Icons.arrow_back)), // TODO change icon
-          title: const Text("Publication"),
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: ElevatedButton(
-                  onPressed: () => submit(),
-                  child: const Text("Publier"),
-                  // style:
-              ),
-            )
-          ]
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            context.go('/');
+          },
+          icon: const Icon(Icons.arrow_back),
+        ), // TODO change icon
+        title: const Text("Publication"),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: ElevatedButton(
+              onPressed: () => submit(),
+              child: const Text("Publier"),
+              // style:
+            ),
+          )
+        ],
       ),
       body: Form(
         child: Column(
@@ -86,16 +94,31 @@ class _PostFormState extends State<PostForm> {
                 keyboardType: TextInputType.multiline,
               ),
             ),
-            if(uploadImage == null)
+            if (uploadImage == null)
               Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
-                  child: TextButton(onPressed: () { pickImage(); }, child: const Text("Ajouter une image"),) // TODO: Image picker and preview
+                padding:
+                    const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+                child: TextButton(
+                  onPressed: () {
+                    pickImage();
+                  },
+                  child: const Text("Ajouter une image"),
+                ),
               ),
-            if(uploadImage != null) ...[
-              Image.file(File(uploadImage!), width: 300,),
+            if (uploadImage != null) ...[
+              Image.file(
+                File(uploadImage!),
+                width: 300,
+              ),
               Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
-                  child: TextButton(onPressed: () { pickImage(); }, child: const Text("Modifier l'image"),) // TODO: Image picker and preview
+                padding:
+                    const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
+                child: TextButton(
+                  onPressed: () {
+                    pickImage();
+                  },
+                  child: const Text("Modifier l'image"),
+                ),
               ),
             ]
           ],
