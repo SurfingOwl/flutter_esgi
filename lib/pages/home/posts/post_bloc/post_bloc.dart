@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
@@ -30,8 +31,9 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       final pagination.Page posts =
           await postRepository.getUserPosts(event.id, event.page, event.size);
       emit(state.copyWith(
-        status: Status.success,
-        posts: posts,
+          status: Status.success,
+          posts: state.posts! + posts.items,
+          paginationInfo: posts
       ));
     } catch (err) {
       emit(
@@ -47,11 +49,17 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     emit(state.copyWith(status: Status.loading));
 
     try {
+      log(event.page.toString());
+      log(event.size.toString());
       final pagination.Page posts =
           await postRepository.getAllPosts(event.page, event.size);
+
+      List<Post>? currentPosts = state.posts;
+
       emit(state.copyWith(
         status: Status.success,
-        posts: posts,
+        posts: currentPosts == null ? posts.items : currentPosts + posts.items,
+        paginationInfo: posts
       ));
     } catch (err) {
       emit(
