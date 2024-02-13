@@ -1,5 +1,10 @@
 import 'dart:convert';
+import 'dart:developer';
 
+import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_esgi/exceptions/auth/bad_request_exception.dart';
+import 'package:flutter_esgi/exceptions/auth/invalid_credentials_exception.dart';
 import 'package:flutter_esgi/http/http_utils.dart';
 import 'package:flutter_esgi/models/account.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,32 +19,42 @@ class AuthDataSource {
     }
   }
 
-  Future<String> signIn(String? email, String? password) async {
-    final SharedPreferences preferences = await SharedPreferences.getInstance();
-    final String creds =
-        utf8.decode(base64Decode(preferences.getString("creds") ?? ""));
+  Future<AuthToken> signIn(String? email, String? password) async {
     LoginData data;
     try {
-      if (creds.isNotEmpty) {
-        data = LoginData(
-            email: _getPasswordFromCreds(creds),
-            password: _getEmailFromCreds(creds));
-      } else {
-        data = LoginData(email: email, password: password);
+      data = LoginData(email: email, password: password);
+      var dio = Http.getApi();
+      final response = await dio.post("/auth/login", data: jsonEncode(data));
+
+      return AuthToken.fromJson(response.data);
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 403) {
+        throw InvalidCredentialsException();
       }
-      final response = await Http.getApi().post("/auth/login", data: data);
-      return response.data['authToken'];
-    } catch (err) {
+      if (e.response?.statusCode == 400) {
+        throw BadRequestException();
+      }
+      rethrow;
+    } catch (e) {
       rethrow;
     }
   }
 
-  Future<String> signUp(String name, String email, String password) async {
+  Future<AuthToken> signUp(String name, String email, String password) async {
     SignupData data = SignupData(name: name, email: email, password: password);
     try {
-      final response = await Http.getApi().post("/auth/signup", data: data);
-      return response.data['authToken'];
-    } catch (err) {
+      final response =
+          await Http.getApi().post("/auth/signup", data: jsonEncode(data));
+      return AuthToken.fromJson(response.data);
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 403) {
+        throw InvalidCredentialsException();
+      }
+      if (e.response?.statusCode == 400) {
+        throw BadRequestException();
+      }
+      rethrow;
+    } catch (e) {
       rethrow;
     }
   }

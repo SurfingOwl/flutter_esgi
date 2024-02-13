@@ -1,6 +1,6 @@
 class Account {
   final int? id;
-  final DateTime? createdAt;
+  final int? createdAt;
   final String? name;
   final String? email;
 
@@ -29,6 +29,25 @@ class LoginData {
     this.email,
     this.password,
   });
+
+  Map<String, dynamic> toJson() => {
+    'email': email,
+    'password': password,
+  };
+}
+
+class AuthToken {
+  final String? authToken;
+  final Account? user;
+
+  AuthToken({this.authToken, this.user});
+
+  factory AuthToken.fromJson(Map<String, dynamic> json) {
+    return AuthToken(
+      authToken: json['authToken'],
+      user: Account.fromJson(json['user'])
+    );
+  }
 }
 
 class SignupData {
@@ -41,4 +60,10 @@ class SignupData {
     required this.email,
     required this.password,
   });
+
+  Map<String, dynamic> toJson() => {
+    'name': name,
+    'email': email,
+    'password': password,
+  };
 }

@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_esgi/http/http_utils.dart';
 import 'package:flutter_esgi/models/page.dart';
 import 'package:flutter_esgi/models/post.dart';
@@ -39,18 +41,36 @@ class PostDataSource {
       rethrow;
     }
   }
-
-  Future<void> addPost(String token, String content, String? imagePath) async {
-    String? base64Image;
-    if (imagePath != null) {
-      base64Image = base64Encode(await File(imagePath).readAsBytes());
-    }
-    PostRequest addPostRequest =
-        PostRequest(content: content, base_64_image: base64Image);
+  
+  Future<void> addPostWithImage(String token, String content, String imagePath) async {
     try {
-      await Http.getApiWithToken(token).post("/post", data: addPostRequest);
+      await Http.getApiWithToken(token)
+          .post("/post", data: await formDataFromImagePath(content, imagePath));
     } catch (err) {
+      log(err.toString());
       rethrow;
+    }
+  }
+
+  Future<void> addPostWithoutImage(String token, String content) async {
+    try {
+      await Http.getApiWithToken(token)
+          .post("/post", data: jsonEncode(PostRequestWithoutImage(content: content)));
+    } catch (err) {
+      log(err.toString());
+      rethrow;
+    }
+  }
+
+  Future<FormData> formDataFromImagePath(
+      String content, String imagePath) async {{
+      String? fileName = imagePath.split('/').last;
+      FormData formData = FormData.fromMap({
+        "base_64_image":
+            await MultipartFile.fromFile(imagePath, filename: fileName),
+        "content": content
+      });
+      return formData;
     }
   }
 
@@ -68,8 +88,8 @@ class PostDataSource {
     if (imagePath != null) {
       base64Image = base64Encode(await File(imagePath).readAsBytes());
     }
-    PostRequest addPostRequest =
-        PostRequest(content: content, base_64_image: base64Image);
+    PostRequestWithoutImage addPostRequest =
+        PostRequestWithoutImage(content: content);
     try {
       final response = await Http.getApiWithToken(token)
           .patch("/post/$id", data: addPostRequest);

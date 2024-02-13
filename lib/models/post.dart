@@ -4,10 +4,10 @@ import 'package:flutter_esgi/models/user.dart';
 
 class Post {
   final int id;
-  final DateTime createdAt;
+  final int createdAt;
   final String content;
-  final Image? image;
-  final User? author;
+  final PostImage? image;
+  final User author;
   final List<Comment>? comments;
   final int? commentsCount;
 
@@ -15,8 +15,8 @@ class Post {
     required this.id,
     required this.createdAt,
     required this.content,
+    required this.author,
     this.image,
-    this.author,
     this.comments,
     this.commentsCount,
   });
@@ -26,26 +26,28 @@ class Post {
       id: json['id'],
       createdAt: json['created_at'],
       content: json['content'],
-      image: Image.fromJson(json['image']),
+      image: json['image'] != null ? PostImage.fromJson(json['image']) : null,
       author: User.fromJson(json['author']),
-      comments: Comment.mapFromJson(json['comments']),
+      comments: json['comments'] != null ? Comment.mapFromJson(json['comments']) : null,
       commentsCount: json['comments_count'],
     );
   }
 
-  static List<Post> mapPostList(List<Map<String, dynamic>> json) {
+  static List<Post> mapPostList(List<dynamic> json) {
     return json.map((e) {
       return Post.fromJson(e);
     }).toList();
   }
 }
 
-class PostRequest {
+class PostRequestWithoutImage {
   final String content;
-  final String? base_64_image;
 
-  PostRequest({
+  PostRequestWithoutImage({
     required this.content,
-    this.base_64_image,
   });
+
+  Map<String, dynamic> toJson() => {
+    'content': content,
+  };
 }

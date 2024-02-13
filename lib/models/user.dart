@@ -1,7 +1,7 @@
 class User {
   final int? id;
-  final String? name;
-  final DateTime? createdAt;
+  final String name;
+  final int? createdAt;
 
   User({
     required this.id,
