@@ -12,7 +12,7 @@ class Comments extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(comments != null) {
+    if(comments != null && comments!.isNotEmpty) {
       return ListView.separated(
           itemBuilder: (_, index) {
             final comment = comments![index];
