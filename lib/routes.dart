@@ -6,6 +6,7 @@ import 'package:flutter_esgi/pages/auth/register/register.dart';
 import 'package:flutter_esgi/pages/home/home.dart';
 import 'package:flutter_esgi/pages/home/post_form/post_form.dart';
 import 'package:flutter_esgi/pages/home/posts/post_detail/post_detail.dart';
+import 'package:flutter_esgi/pages/home/user/user_page.dart';
 import 'package:go_router/go_router.dart';
 
 List<GoRoute> routes() {
@@ -27,6 +28,14 @@ List<GoRoute> routes() {
     GoRoute(
       path: '/new_post',
       builder: (context, state) => const PostForm(),
+      redirect: (context, state) => onUnauthenticated(context),
+    ),
+    GoRoute(
+      path: '/user',
+      builder: (context, state) {
+        var id = state.extra! as int;
+        return UserPage(userId: id);
+      },
       redirect: (context, state) => onUnauthenticated(context),
     ),
     GoRoute(

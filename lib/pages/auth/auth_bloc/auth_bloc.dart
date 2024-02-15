@@ -50,6 +50,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         status: Status.success,
         token: token,
         isAuthenticated: true,
+        account: token.user,
       ));
     } on Exception catch (err) {
       emit(
@@ -77,6 +78,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         status: Status.success,
         token: token,
         isAuthenticated: true,
+        account: token.user
       ));
     } on Exception catch (err) {
       emit(
