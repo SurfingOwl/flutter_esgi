@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_esgi/http/http_utils.dart';
 import 'package:flutter_esgi/models/comment.dart';
 
@@ -8,7 +10,7 @@ class CommentDataSource {
 
     try {
       final response = await Http.getApiWithToken(token)
-          .post("/comment", data: commentRequest);
+          .post("/comment", data: jsonEncode(commentRequest));
       return Comment.fromJson(response.data);
     } catch (err) {
       rethrow;

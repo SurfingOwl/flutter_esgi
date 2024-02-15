@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_esgi/common/widgets/close_route.dart';
+import 'package:flutter_esgi/common/widgets/custom_snackbar.dart';
 import 'package:flutter_esgi/common/widgets/user_header.dart';
+import 'package:flutter_esgi/pages/auth/auth_bloc/auth_bloc.dart';
 import 'package:flutter_esgi/pages/home/posts/post_bloc/post_bloc.dart';
+import 'package:flutter_esgi/pages/home/posts/post_detail/comment_bloc/comment_bloc.dart';
 import 'package:flutter_esgi/pages/home/posts/post_detail/comments.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../http/http_utils.dart';
 
+// TODO fix page size
 class PostDetail extends StatefulWidget {
   final int postId;
 
@@ -18,12 +22,29 @@ class PostDetail extends StatefulWidget {
 }
 
 class _PostDetailState extends State<PostDetail> {
-
   @override
   void initState() {
     super.initState();
     final postBloc = BlocProvider.of<PostBloc>(context);
     postBloc.add(GetPostById(id: widget.postId));
+  }
+
+  TextEditingController commentController = TextEditingController();
+
+
+  void sendComment(String text) {
+    final commentBloc = BlocProvider.of<CommentBloc>(context);
+    final authBloc = BlocProvider.of<AuthBloc>(context);
+    var token = authBloc.state.token?.authToken;
+    if(token != null && text.isNotEmpty) {
+      commentBloc.add(AddComment(token: token, id: widget.postId, content: text));
+    }
+    else if(text.isEmpty) {
+      showSnackBar(context, "Vous devez entrer du texte");
+    }
+    else {
+      context.go('/login');
+    }
   }
 
   @override
@@ -34,32 +55,71 @@ class _PostDetailState extends State<PostDetail> {
       ),
       body: BlocBuilder<PostBloc, PostState>(
         builder: (context, state) {
-          switch(state.status) {
+          switch (state.status) {
             case Status.loading || Status.initial:
-              return const Center(child: CircularProgressIndicator(),);
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             case Status.success:
-                return SafeArea(
+              return SafeArea(
+                // child: SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
-                    child: Column(
-                      children: [
-                        UserHeader(name: state.post!.author.name),
-                        const SizedBox(height: 25,),
-                        Align(alignment: Alignment.topLeft, child: Text(state.post!.content)),
-                        const SizedBox(height: 10,),
-                        Image.network(state.post!.image!.url),
-                        const SizedBox(height: 25,),
-                        ElevatedButton(onPressed: () {}, child: const Text("Ajouter un commentaire")),
-                        const SizedBox(height: 25,),
-                        Expanded(child: Comments(comments: state.post!.comments))
-                      ],
+                      child: Column(
+                        children: [
+                          UserHeader(name: state.post!.author.name),
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(state.post!.content, style: Theme.of(context).textTheme.titleSmall,)),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          if (state.post?.image != null)
+                            Image.network(
+                              state.post!.image!.url,
+                              width: 400,
+                              height: 400,
+                            ),
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          // Align(
+                          //     alignment: Alignment.topLeft,
+                          //     child: Text("Commentaires", style: Theme.of(context).textTheme.titleSmall,),
+                          // ),
+                          const SizedBox(height: 5,),
+                          Form(
+                            child: Row(
+                              children: [
+                                Flexible(child: TextField(controller: commentController, decoration: const InputDecoration(
+                                  hintText: "Votre commentaire",
+                                ),)),
+                                IconButton(
+                                  onPressed: () { sendComment(commentController.text); },
+                                  icon: const Icon(
+                                    Icons.send_rounded,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          Flexible(child: Comments(comments: state.post!.comments))
+                        ],
+                      ),
                     ),
-                  ),
-                );
+                  // ),
+              );
             case Status.error:
-              return const Text("Une erreur est survenue");
+              return const Center(
+                  child: Text("Une erreur est survenue, veuillez réessayer"));
           }
-
         },
       ),
     );

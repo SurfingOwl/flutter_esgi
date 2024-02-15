@@ -37,6 +37,11 @@ class AddCommentRequest {
     required this.post_id,
     required this.content,
   });
+
+  Map<String, dynamic> toJson() => {
+    'post_id': post_id,
+    'content': content,
+  };
 }
 
 class PatchCommentRequest {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_esgi/common/widgets/%20custom_date.dart';
 import 'package:flutter_esgi/models/comment.dart';
 
 class Comments extends StatelessWidget {
@@ -23,7 +24,7 @@ class Comments extends StatelessWidget {
           itemCount: comments!.length);
     }
     else {
-      return const Text("toot");
+      return const Text("Aucun commentaire pour le moment");
     }
 
   }
@@ -38,7 +39,7 @@ class CommentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25),
+      padding: const EdgeInsets.symmetric(horizontal: 1),
       child: Column(
         children: [
           const Divider(color: Colors.white ),
@@ -51,8 +52,9 @@ class CommentCard extends StatelessWidget {
               Text(comment.author!.name),
             ],
           ),
+          Align(alignment: Alignment.topLeft, child: CustomDate(dateInt: comment.createdAt)),
           const SizedBox(height: 5,),
-          Align(alignment: Alignment.topLeft, child: Text(comment.content))
+          Align(alignment: Alignment.topLeft, child: Text(comment.content, style: Theme.of(context).textTheme.titleMedium,))
         ],
       ),
     );
