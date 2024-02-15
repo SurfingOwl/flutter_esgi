@@ -30,8 +30,11 @@ List<GoRoute> routes() {
       redirect: (context, state) => onUnauthenticated(context),
     ),
     GoRoute(
-        path: '/post_detail/:id',
-        builder: (context, state) => const PostDetail())
+        path: '/post_detail',
+        builder: (context, GoRouterState state) {
+          var id = state.extra! as int;
+          return PostDetail(postId: id);
+        }),
   ];
 }
 

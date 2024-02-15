@@ -14,7 +14,7 @@ class Home extends StatelessWidget {
             actions: <Widget>[
               IconButton(
                   onPressed: () {
-                    context.go("/new_post");
+                    context.push("/new_post");
                   },
                   icon: const Icon(Icons.add)), // TODO change icon
               IconButton(
