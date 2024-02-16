@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_esgi/common/widgets/close_route.dart';
+import 'package:flutter_esgi/common/widgets/custom_image.dart';
 import 'package:flutter_esgi/common/widgets/custom_snackbar.dart';
 import 'package:flutter_esgi/common/widgets/user_header.dart';
 import 'package:flutter_esgi/pages/auth/auth_bloc/auth_bloc.dart';
@@ -62,6 +63,7 @@ class _PostDetailState extends State<PostDetail> {
                 child: CircularProgressIndicator(),
               );
             case Status.success:
+              var image = state.post?.image;
               if(state.post != null) {
                 return SafeArea(
                   // child: SingleChildScrollView(
@@ -77,14 +79,10 @@ class _PostDetailState extends State<PostDetail> {
                             alignment: Alignment.topLeft,
                             child: Text(state.post!.content, style: Theme.of(context).textTheme.titleSmall,)),
                         const SizedBox(
-                          height: 10,
+                          height: 25  ,
                         ),
-                        if (state.post?.image != null)
-                          Image.network(
-                            state.post!.image!.url,
-                            width: 400,
-                            height: 400,
-                          ),
+                        if (image != null)
+                          CustomImage(image: image),
                         const SizedBox(
                           height: 25,
                         ),

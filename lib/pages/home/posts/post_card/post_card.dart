@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_esgi/common/widgets/%20custom_date.dart';
+import 'package:flutter_esgi/common/widgets/custom_image.dart';
 import 'package:flutter_esgi/common/widgets/user_header.dart';
 import 'package:go_router/go_router.dart';
 
@@ -11,6 +12,7 @@ class PostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var image = post.image;
     return SafeArea(
       child: GestureDetector(
         onTap: () {
@@ -41,15 +43,9 @@ class PostCard extends StatelessWidget {
                       post.content,
                       style: Theme.of(context).textTheme.titleMedium,
                     )), // todo couper fin
-                if (post.image?.url != null) ...[
+                if (image != null) ...[
                   const SizedBox(height: 20),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                      10.0,
-                    ),
-                    child:
-                        Image.network(post.image!.url, width: double.infinity, height: 300, fit: BoxFit.cover),
-                  )
+                  CustomImage(image: image)
                 ],
                 const SizedBox(height: 20),
                 Align(
