@@ -43,7 +43,8 @@ class _PostDetailState extends State<PostDetail> {
       showSnackBar(context, "Vous devez entrer du texte");
     }
     else {
-      context.go('/login');
+      context.push('/login');
+      showSnackBar(context, "Vous devez être authentifier pour effectuer cette action");
     }
   }
 

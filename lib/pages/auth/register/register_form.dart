@@ -58,7 +58,7 @@ class _RegisterFormState extends State<RegisterForm> {
           ),
         ),
         TextButton(
-          onPressed: () => context.go('/login'),
+          onPressed: () => context.pop('/register'),
           child: const Text("J'ai déjà un compte, me connecter."),
         ),
         ElevatedButton(

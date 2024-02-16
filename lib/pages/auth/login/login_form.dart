@@ -51,7 +51,7 @@ class _LoginFormState extends State<LoginForm> {
             ),
           ),
           TextButton(
-            onPressed: () => context.go('/register'),
+            onPressed: () => context.push('/register'),
             child: const Text("Vous n'avez pas de compte ? Inscrivez vous"),
           ),
           ElevatedButton(

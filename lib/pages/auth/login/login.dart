@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_esgi/common/widgets/close_route.dart';
 import 'package:flutter_esgi/common/widgets/custom_snackbar.dart';
 import 'package:flutter_esgi/exceptions/auth/bad_request_exception.dart';
 import 'package:flutter_esgi/exceptions/auth/invalid_credentials_exception.dart';
@@ -34,8 +35,11 @@ class Login extends StatelessWidget {
             }
           }
         },
-        child: const Scaffold(
-          body: Center(
+        child: Scaffold(
+          appBar: AppBar(
+            leading: const CloseRoute(actualRoute: '/login'),
+          ),
+          body: const Center(
             child: Column(
               children: [
                 Expanded(
