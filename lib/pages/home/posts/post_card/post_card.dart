@@ -39,7 +39,7 @@ class PostCard extends StatelessWidget {
                     alignment: Alignment.topLeft,
                     child: Text(
                       post.content,
-                      style: Theme.of(context).textTheme.titleSmall,
+                      style: Theme.of(context).textTheme.titleMedium,
                     )), // todo couper fin
                 if (post.image?.url != null) ...[
                   const SizedBox(height: 20),
@@ -48,8 +48,8 @@ class PostCard extends StatelessWidget {
                       10.0,
                     ),
                     child:
-                        Image.network(post.image!.url, width: 400, height: 400),
-                  ) // TODO on click open
+                        Image.network(post.image!.url, width: double.infinity, height: 300, fit: BoxFit.cover),
+                  )
                 ],
                 const SizedBox(height: 20),
                 Align(

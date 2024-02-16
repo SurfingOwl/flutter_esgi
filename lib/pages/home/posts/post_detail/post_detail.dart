@@ -87,10 +87,6 @@ class _PostDetailState extends State<PostDetail> {
                         const SizedBox(
                           height: 25,
                         ),
-                        // Align(
-                        //     alignment: Alignment.topLeft,
-                        //     child: Text("Commentaires", style: Theme.of(context).textTheme.titleSmall,),
-                        // ),
                         const SizedBox(height: 5,),
                         Form(
                           child: Row(

@@ -75,15 +75,21 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
       List<Post>? currentPosts = state.posts;
 
-      if(currentPosts == null) {
-        currentPosts = posts.items;
-      } else {
-        for(var post in posts.items) {
-          if(!currentPosts.contains(post)) {
-            currentPosts.add(post);
+      if(event.page > 1) {
+        if(currentPosts == null) {
+          currentPosts = posts.items;
+        } else {
+          for(var post in posts.items) {
+            if(!currentPosts.contains(post)) {
+              currentPosts.add(post);
+            }
           }
         }
       }
+      else {
+        currentPosts = posts.items;
+      }
+
 
       emit(state.copyWith(
         status: Status.success,
