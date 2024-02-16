@@ -21,17 +21,39 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     on<AddPostWithoutImage>(_onAddPostWithoutImage);
     on<DeletePost>(_onDeletePost);
     on<ModifyPost>(_onModifyPost);
+    on<RefreshPost>(_onRefreshPost);
   }
 
   void _onGetUserPosts(GetUserPosts event, Emitter<PostState> emit) async {
     emit(state.copyWith(status: Status.loading));
-    log("toto");
     try {
       final pagination.Page posts =
           await postRepository.getUserPosts(event.id, event.page, event.size);
       emit(state.copyWith(
           status: Status.success,
           posts: state.posts! + posts.items,
+          paginationInfo: posts
+      ));
+    } catch (err) {
+      emit(
+        state.copyWith(
+          status: Status.error,
+          error: Exception(),
+        ),
+      );
+    }
+  }
+
+  void _onRefreshPost(RefreshPost event, Emitter<PostState> emit) async {
+    emit(state.copyWith(status: Status.loading));
+
+    try {
+      final pagination.Page posts =
+      await postRepository.getAllPosts(1, 10);
+
+      emit(state.copyWith(
+          status: Status.success,
+          posts: posts.items,
           paginationInfo: posts
       ));
     } catch (err) {

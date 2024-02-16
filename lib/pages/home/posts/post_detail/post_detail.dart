@@ -61,61 +61,67 @@ class _PostDetailState extends State<PostDetail> {
                 child: CircularProgressIndicator(),
               );
             case Status.success:
-              return SafeArea(
-                // child: SingleChildScrollView(
+              if(state.post != null) {
+                return SafeArea(
+                  // child: SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                        children: [
-                          UserHeader(name: state.post!.author.name),
-                          const SizedBox(
-                            height: 25,
+                    child: Column(
+                      children: [
+                        UserHeader(name: state.post!.author.name),
+                        const SizedBox(
+                          height: 25,
+                        ),
+                        Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(state.post!.content, style: Theme.of(context).textTheme.titleSmall,)),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        if (state.post?.image != null)
+                          Image.network(
+                            state.post!.image!.url,
+                            width: 400,
+                            height: 400,
                           ),
-                          Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(state.post!.content, style: Theme.of(context).textTheme.titleSmall,)),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          if (state.post?.image != null)
-                            Image.network(
-                              state.post!.image!.url,
-                              width: 400,
-                              height: 400,
-                            ),
-                          const SizedBox(
-                            height: 25,
-                          ),
-                          // Align(
-                          //     alignment: Alignment.topLeft,
-                          //     child: Text("Commentaires", style: Theme.of(context).textTheme.titleSmall,),
-                          // ),
-                          const SizedBox(height: 5,),
-                          Form(
-                            child: Row(
-                              children: [
-                                Flexible(child: TextField(controller: commentController, decoration: const InputDecoration(
-                                  hintText: "Votre commentaire",
-                                ),)),
-                                IconButton(
-                                  onPressed: () { sendComment(commentController.text); },
-                                  icon: const Icon(
-                                    Icons.send_rounded,
-                                    color: Colors.white,
-                                  ),
+                        const SizedBox(
+                          height: 25,
+                        ),
+                        // Align(
+                        //     alignment: Alignment.topLeft,
+                        //     child: Text("Commentaires", style: Theme.of(context).textTheme.titleSmall,),
+                        // ),
+                        const SizedBox(height: 5,),
+                        Form(
+                          child: Row(
+                            children: [
+                              Flexible(child: TextField(controller: commentController, decoration: const InputDecoration(
+                                hintText: "Votre commentaire",
+                              ),)),
+                              IconButton(
+                                onPressed: () { sendComment(commentController.text); },
+                                icon: const Icon(
+                                  Icons.send_rounded,
+                                  color: Colors.white,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(
-                            height: 25,
-                          ),
-                          Flexible(child: Comments(comments: state.post!.comments))
-                        ],
-                      ),
+                        ),
+                        const SizedBox(
+                          height: 25,
+                        ),
+                        Flexible(child: Comments(comments: state.post!.comments))
+                      ],
                     ),
+                  ),
                   // ),
-              );
+                );
+              }
+              else {
+                return const Center(child: CircularProgressIndicator(),);
+              }
+
             case Status.error:
               return const Center(
                   child: Text("Une erreur est survenue, veuillez réessayer"));

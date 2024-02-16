@@ -15,6 +15,10 @@ class GetUserPosts extends PostEvent {
   });
 }
 
+class RefreshPost extends PostEvent {
+
+}
+
 class GetAllPosts extends PostEvent {
   final int page;
   final int size;
