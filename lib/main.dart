@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_esgi/datasources/comment_data_source.dart';
 import 'package:flutter_esgi/pages/auth/auth_bloc/auth_bloc.dart';
 import 'package:flutter_esgi/pages/home/posts/post_bloc/post_bloc.dart';
+import 'package:flutter_esgi/pages/home/posts/post_detail/comment_bloc/comment_bloc.dart';
+import 'package:flutter_esgi/pages/home/user/user/user_bloc.dart';
+import 'package:flutter_esgi/repositories/comment_repository.dart';
 import 'package:flutter_esgi/routes.dart';
 import 'package:flutter_esgi/repositories/auth_repository.dart';
 import 'package:flutter_esgi/repositories/post_repository.dart';
 import 'package:flutter_esgi/repositories/user_repository.dart';
 import 'package:flutter_esgi/theme.dart';
 import 'package:go_router/go_router.dart';
-
-import 'blocs/user/user_bloc.dart';
 import 'datasources/auth_data_source.dart';
 import 'datasources/post_data_source.dart';
 import 'datasources/user_data_source.dart';
@@ -34,6 +36,9 @@ class MyApp extends StatelessWidget {
           create: (context) => PostRepository(postDataSource: PostDataSource()),
         ),
         RepositoryProvider(
+          create: (context) => CommentRepository(commentDataSource: CommentDataSource()),
+        ),
+        RepositoryProvider(
           create: (context) => UserRepository(userDataSource: UserDataSource()),
         ),
       ],
@@ -44,6 +49,9 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => UserBloc(userRepository: context.read<UserRepository>()),
+          ),
+          BlocProvider(
+            create: (context) => CommentBloc(commentRepository: context.read<CommentRepository>()),
           ),
           BlocProvider(
             create: (context) => PostBloc(postRepository: context.read<PostRepository>()),

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_esgi/http/http_utils.dart';
@@ -22,11 +21,11 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     on<AddPostWithoutImage>(_onAddPostWithoutImage);
     on<DeletePost>(_onDeletePost);
     on<ModifyPost>(_onModifyPost);
+    on<RefreshPost>(_onRefreshPost);
   }
 
   void _onGetUserPosts(GetUserPosts event, Emitter<PostState> emit) async {
     emit(state.copyWith(status: Status.loading));
-
     try {
       final pagination.Page posts =
           await postRepository.getUserPosts(event.id, event.page, event.size);
@@ -45,20 +44,56 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     }
   }
 
+  void _onRefreshPost(RefreshPost event, Emitter<PostState> emit) async {
+    emit(state.copyWith(status: Status.loading));
+
+    try {
+      final pagination.Page posts =
+      await postRepository.getAllPosts(1, 10);
+
+      emit(state.copyWith(
+          status: Status.success,
+          posts: posts.items,
+          paginationInfo: posts
+      ));
+    } catch (err) {
+      emit(
+        state.copyWith(
+          status: Status.error,
+          error: Exception(),
+        ),
+      );
+    }
+  }
+
   void _onGetAllPosts(GetAllPosts event, Emitter<PostState> emit) async {
     emit(state.copyWith(status: Status.loading));
 
     try {
-      log(event.page.toString());
-      log(event.size.toString());
       final pagination.Page posts =
           await postRepository.getAllPosts(event.page, event.size);
 
       List<Post>? currentPosts = state.posts;
 
+      if(event.page > 1) {
+        if(currentPosts == null) {
+          currentPosts = posts.items;
+        } else {
+          for(var post in posts.items) {
+            if(!currentPosts.contains(post)) {
+              currentPosts.add(post);
+            }
+          }
+        }
+      }
+      else {
+        currentPosts = posts.items;
+      }
+
+
       emit(state.copyWith(
         status: Status.success,
-        posts: currentPosts == null ? posts.items : currentPosts + posts.items,
+        posts: currentPosts,
         paginationInfo: posts
       ));
     } catch (err) {

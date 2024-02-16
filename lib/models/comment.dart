@@ -18,11 +18,11 @@ class Comment {
       id: json['id'],
       createdAt: json['created_at'],
       content: json['content'],
-      author: json['author'],
+      author: User.fromJson(json['author']),
     );
   }
 
-  static List<Comment> mapFromJson(List<Map<String, dynamic>> json) {
+  static List<Comment> mapFromJson(List<dynamic> json) {
     return json.map((e) {
       return Comment.fromJson(e);
     }).toList();
@@ -37,6 +37,11 @@ class AddCommentRequest {
     required this.post_id,
     required this.content,
   });
+
+  Map<String, dynamic> toJson() => {
+    'post_id': post_id,
+    'content': content,
+  };
 }
 
 class PatchCommentRequest {

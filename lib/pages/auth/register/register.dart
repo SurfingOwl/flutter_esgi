@@ -4,6 +4,7 @@ import 'package:flutter_esgi/common/widgets/gestwit_title.dart';
 import 'package:flutter_esgi/pages/auth/register/register_form.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../common/widgets/close_route.dart';
 import '../../../common/widgets/custom_snackbar.dart';
 import '../../../exceptions/auth/bad_request_exception.dart';
 import '../../../exceptions/auth/invalid_credentials_exception.dart';
@@ -34,8 +35,11 @@ class Register extends StatelessWidget {
           }
         }
       },
-      child: const Scaffold(
-        body: SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          leading: const CloseRoute(actualRoute: '/register'),
+        ),
+        body: const SafeArea(
           child: Form(
             child: Column(
               children: [

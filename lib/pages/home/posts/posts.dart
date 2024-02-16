@@ -8,11 +8,8 @@ import 'package:flutter_esgi/pages/home/posts/post_card/post_card.dart';
 
 import '../../../http/http_utils.dart';
 
-// TODO: retrieve from API
 // TODO: manage loader
-// TODO: show info
 // TODO: manage scroll pagination
-// TODO: redirect to detail page
 class Posts extends StatefulWidget {
   const Posts({super.key});
 
@@ -31,49 +28,51 @@ class _PostsState extends State<Posts> {
     scrollController.addListener(_onScroll);
   }
 
+  Future<void> _pullRefresh() async {
+    final postBloc = BlocProvider.of<PostBloc>(context);
+    postBloc.add(RefreshPost());
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PostBloc, PostState>(
       builder: (context, state) {
         List<Post>? posts = state.posts;
         if (posts != null) {
-          return ListView.separated(
-            controller: scrollController,
-            itemBuilder: (_, index) {
-              if(index < posts.length) {
-                final post = posts[index];
-                return PostCard(post: post);
-              }
-              else{
-                return const BottomLoader();
-              }
-
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return const Divider();
-            },
-            itemCount: state.status == Status.loading ? posts.length + 1 : posts.length,
+          return RefreshIndicator(
+            onRefresh: _pullRefresh,
+            child: ListView.separated(
+              controller: scrollController,
+              itemBuilder: (_, index) {
+                if(index < posts.length) {
+                  final post = posts[index];
+                  return PostCard(post: post);
+                }
+                else{
+                  return const BottomLoader();
+                }
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return const Divider();
+              },
+              itemCount: state.status == Status.loading ? posts.length + 1 : posts.length,
+            ),
           );
         }
-        return const Center(
-            child: Text("Il n'y a aucun post pour le moment"));
-        // switch (state.status) {
-        //   case Status.success || Status.loading:
-        //
-        //   case Status.initial:
-        //     return const Center(
-        //       child: CircularProgressIndicator(),
-        //     );
-        //   case Status.error:
-        //     return const Text("Error");
-        // }
+        else if (state.status == Status.loading && posts == null) {
+          return const Center(child: CircularProgressIndicator(),);
+        }
+        else {
+          return const Center(
+              child: Text("Il n'y a aucun post pour le moment"));
+        }
       },
     );
   }
 
   void _onScroll() {
     if (
-        scrollController.position.maxScrollExtent - scrollController.position.pixels <= 200) {
+        scrollController.position.maxScrollExtent == scrollController.position.pixels) {
       final postBloc = BlocProvider.of<PostBloc>(context);
       if(Status.loading != postBloc.state.status) {
         int? page = postBloc.state.paginationInfo!.nextPage;

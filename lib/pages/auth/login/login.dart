@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_esgi/common/widgets/close_route.dart';
 import 'package:flutter_esgi/common/widgets/custom_snackbar.dart';
 import 'package:flutter_esgi/exceptions/auth/bad_request_exception.dart';
 import 'package:flutter_esgi/exceptions/auth/invalid_credentials_exception.dart';
@@ -9,7 +10,7 @@ import '../../../common/widgets/image_logo.dart';
 import '../../../http/http_utils.dart';
 import 'login_form.dart';
 
-// TODO: form controller validation from client side
+// TODO: revenir a la home
 class Login extends StatelessWidget {
   const Login({super.key});
 
@@ -34,8 +35,11 @@ class Login extends StatelessWidget {
             }
           }
         },
-        child: const Scaffold(
-          body: Center(
+        child: Scaffold(
+          appBar: AppBar(
+            leading: const CloseRoute(actualRoute: '/login'),
+          ),
+          body: const Center(
             child: Column(
               children: [
                 Expanded(
