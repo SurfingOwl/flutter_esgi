@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_esgi/http/http_utils.dart';
 import 'package:flutter_esgi/models/post.dart';
 import 'package:flutter_esgi/models/user.dart';
+import 'package:flutter_esgi/pages/error/error_page.dart';
 import 'package:flutter_esgi/pages/home/home.dart';
 import 'package:flutter_esgi/pages/home/posts/post_bloc/post_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -20,16 +21,15 @@ void main() {
 
   testWidgets('Testing Rendering of Home Widget', (WidgetTester tester) async {
     when(mockPostBloc.stream).thenAnswer(
-          (_) =>
-          Stream.value(
-            PostState(
-              status: Status.initial,
-              post: null,
-              posts: null,
-              paginationInfo: null,
-              error: null,
-            ),
-          ),
+      (_) => Stream.value(
+        PostState(
+          status: Status.initial,
+          post: null,
+          posts: null,
+          paginationInfo: null,
+          error: null,
+        ),
+      ),
     );
 
     when(mockPostBloc.state).thenReturn(PostState(
@@ -51,10 +51,10 @@ void main() {
     expect(find.byType(Home), findsOneWidget);
   });
 
-  testWidgets('Display posts when PostBloc emits posts successfully', (WidgetTester tester) async {
-
+  testWidgets('Display posts when PostBloc emits posts successfully',
+      (WidgetTester tester) async {
     when(mockPostBloc.stream).thenAnswer(
-          (_) => Stream.value(
+      (_) => Stream.value(
         PostState(
           status: Status.success,
           post: null,
@@ -95,7 +95,6 @@ void main() {
       error: null,
     ));
 
-
     await tester.pumpWidget(
       MaterialApp(
         home: BlocProvider<PostBloc>(
@@ -104,10 +103,19 @@ void main() {
         ),
       ),
     );
-
     await tester.pumpAndSettle();
-
     expect(find.text('This is a test post'), findsOneWidget);
   });
 
+
+  testWidgets('ErrorPage displays error message and retry button', (WidgetTester tester) async {
+
+    await tester.pumpWidget(const MaterialApp(home: ErrorPage()));
+
+    expect(find.text('GesTwit'), findsOneWidget);
+
+    expect(find.text('Un erreur est survenue'), findsOneWidget);
+
+    expect(find.text('Réessayer'), findsOneWidget);
+  });
 }
