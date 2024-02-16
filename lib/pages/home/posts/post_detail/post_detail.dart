@@ -35,10 +35,13 @@ class _PostDetailState extends State<PostDetail> {
 
   void sendComment(String text) {
     final commentBloc = BlocProvider.of<CommentBloc>(context);
+    final postBloc = BlocProvider.of<PostBloc>(context);
     final authBloc = BlocProvider.of<AuthBloc>(context);
     var token = authBloc.state.token?.authToken;
     if(token != null && text.isNotEmpty) {
       commentBloc.add(AddComment(token: token, id: widget.postId, content: text));
+      commentController.clear();
+      postBloc.add(GetPostById(id: widget.postId));
     }
     else if(text.isEmpty) {
       showSnackBar(context, "Vous devez entrer du texte");
